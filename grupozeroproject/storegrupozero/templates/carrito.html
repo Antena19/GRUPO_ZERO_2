@@ -1,0 +1,43 @@
+<!-- templates/carrito.html -->
+{% extends 'base.html' %}
+{% load cart_extras %}
+
+{% block title %}Carrito{% endblock %}
+
+{% block content %}
+<h1>Carrito de Compras</h1>
+{% if cart.items.count > 0 %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>${{ item.product.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.product.price|multiply:item.quantity }}</td>
+                <td>
+                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3>Total: ${{ cart.items.all|sum_total }}</h3>
+    <a href="#" class="btn btn-primary">Proceder al Pago</a>
+    <a href="{% url 'productos' %}" class="btn btn-secondary">Seguir Comprando</a>
+{% else %}
+    <p>Tu carrito está vacío</p>
+    <a href="{% url 'productos' %}" class="btn btn-secondary">Ver Productos</a>
+{% endif %}
+{% endblock %}
+
+

@@ -1,0 +1,19 @@
+<!-- producto_detalle.html -->
+{% extends 'base.html' %}
+{% block content %}
+<h5 class="h5 text-center m-5">{{ product.name }}</h5>
+<div class="container-fluid p-5 m-5">
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <img src="{{ product.image.url }}" class="img-fluid" alt="{{ product.name }}">
+        </div>
+        <div class="col-12 col-md-6">
+            <p><strong>Descripción:</strong> {{ product.description }}</p>
+            <p><strong>Precio:</strong> ${{ product.price }}</p>
+            <p><strong>Artista:</strong> {{ product.artist.name }}</p>
+            <p><strong>Técnica:</strong> {{ product.technique.name }}</p>
+            <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Agregar al Carrito</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
