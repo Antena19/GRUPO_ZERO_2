@@ -1,8 +1,8 @@
-# storegrupozero/models.py
 from django.contrib.auth.models import User
 from django.db import models
+from django import forms
 
-#MODELO ARTISTAS
+# MODELO ARTISTAS
 class Artist(models.Model):
     name = models.CharField(max_length=100)
     bio = models.TextField()
@@ -24,7 +24,7 @@ class Technique(models.Model):
     def __str__(self):
         return self.name
 
-#MODELO PRODUCTOS
+# MODELO PRODUCTOS
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
@@ -39,6 +39,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+# MODELO CARRITO DE COMPRAS
 class Cart(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
     session_key = models.CharField(max_length=40, null=True, blank=True)
@@ -54,12 +55,12 @@ class CartItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-#MODELO PARA INFORMACION CONTACTOS
-class Contacto(models.Model):
+# MODELO PARA INFORMACION CONTACTOS
+class MensajeContacto(models.Model):
     nombre = models.CharField(max_length=100)
     correo = models.EmailField()
     mensaje = models.TextField()
-    fecha_envio = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.nombre

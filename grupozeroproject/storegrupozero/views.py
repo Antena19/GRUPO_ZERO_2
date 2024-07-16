@@ -1,21 +1,28 @@
-# storegrupozero/views.py
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from .forms import ContactForm  # Importa tu formulario de contacto
-from .models import Artist, Technique, Product, Cart, CartItem  # Importa tus modelos
 from django.urls import reverse_lazy
+import random
+from .forms import ContactForm, RegistroForm
+from .models import Artist, Technique, Product, Cart, CartItem, MensajeContacto
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth.models import User
 
+# VISTA INICIO
 def index(request):
-    # Obtener los últimos 4 artistas, técnicas y productos para mostrar en el index
-    latest_artists = Artist.objects.order_by('-created_at')[:4]
-    latest_techniques = Technique.objects.order_by('-created_at')[:4]
-    latest_products = Product.objects.order_by('-created_at')[:4]
-    
+    products = list(Product.objects.all())
+    artists = list(Artist.objects.all())
+    techniques = list(Technique.objects.all())
+
+    featured_products = random.sample(products, min(len(products), 4))
+    featured_artist = random.choice(artists) if artists else None
+    featured_technique = random.choice(techniques) if techniques else None
+
     context = {
-        'latest_artists': latest_artists,
-        'latest_techniques': latest_techniques,
-        'latest_products': latest_products,
+        'featured_products': featured_products,
+        'featured_artist': featured_artist,
+        'featured_technique': featured_technique,
     }
     
     return render(request, 'index.html', context)
@@ -36,12 +43,41 @@ def producto_detalle(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     return render(request, 'producto_detalle.html', {'product': product})
 
+#VISTA REGISTRO
+def registro(request):
+    if request.method == 'POST':
+        form = RegistroForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.set_password(form.cleaned_data['password'])
+            user.save()
+            user = authenticate(username=user.username, password=form.cleaned_data['password'])
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'Registro exitoso. ¡Bienvenido!')
+                return redirect('index')
+            else:
+                messages.error(request, 'Error en la autenticación después del registro.')
+        else:
+            messages.error(request, 'Formulario no válido. Por favor, corrige los errores.')
+    else:
+        form = RegistroForm()
+    return render(request, 'registration/registro.html', {'form': form})
+
+#VISTA LOGIN
 def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('index')  # Redirige a la página principal después del login
+        else:
+            messages.error(request, 'Usuario o contraseña incorrectos')
     return render(request, 'login.html')
 
-def registro(request):
-    return render(request, 'registro.html')
-
+# CRUD CARRITO
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
@@ -64,29 +100,38 @@ def remove_from_cart(request, item_id):
     cart_item.delete()
     return redirect('view_cart')
 
-def contact(request):
+def update_cart_item_quantity(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        if quantity > 0:
+            cart_item.quantity = quantity
+            cart_item.save()
+        else:
+            cart_item.delete()
+    return redirect('view_cart')
+
+#VISTA FORMULARIO CONTACTO
+def formulario_contacto(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            nombre = form.cleaned_data['nombre']
-            correo = form.cleaned_data['correo']
-            mensaje = form.cleaned_data['mensaje']
-            
-            # Aquí puedes agregar la lógica para enviar el correo electrónico
-            send_mail(
-                'Nuevo mensaje de contacto',
-                f'Nombre: {nombre}\nCorreo: {correo}\nMensaje: {mensaje}',
-                'tu_email@tudominio.com',  # Cambia esto por tu dirección de correo electrónico
-                ['destinatario@dominio.com'],  # Cambia esto por la dirección de correo del destinatario
-                fail_silently=False,
-            )
-            
-            return render(request, 'contacto_exito.html')  # Página de éxito
+            form.save()
+            messages.success(request, 'Mensaje enviado con éxito.')
+            return redirect('exito')
+        else:
+            messages.error(request, 'Error al enviar el mensaje. Por favor, inténtalo de nuevo.')
+            return redirect('error')
     else:
         form = ContactForm()
+    return render(request, 'mycontacto/formulario_contacto.html', {'form': form})
 
-    return render(request, 'formulario_contacto.html', {'form': form})
+def lista_mensajes(request):
+    mensajes = MensajeContacto.objects.all()
+    return render(request, 'mycontacto/lista_mensajes.html', {'mensajes': mensajes})
 
-def ver_contactos(request):
-    contactos = Contacto.objects.all()
-    return render(request, 'ver_contactos.html', {'contactos': contactos})
+def exito(request):
+    return render(request, 'mycontacto/exito.html')
+
+def error(request):
+    return render(request, 'mycontacto/error.html')

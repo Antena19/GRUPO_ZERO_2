@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+Formulario de Contacto - Grupo Cero
+{% endblock %}
+
+{% block body_class %}
+fondo-contacto
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="titulo-seccion text-center mb-4 text-white">FORMULARIO DE CONTACTO</h2>
+    <form id="formularioContacto" method="post" class="formulario d-flex flex-column align-items-center text-white p-5 rounded">
+        {% csrf_token %}
+        <div class="container-fluid mb-3 mt-5">
+            <div class="row justify-content-center">
+                <div class="form col-sm-12 col-md-6 col-lg-4">
+                    <label for="id_nombre" class="form-label">Nombre</label>
+                    {{ form.nombre }}
+                    <div id="errorNombre" class="text-danger"></div>
+                </div>
+                <div class="form col-sm-12 col-md-6 col-lg-4">
+                    <label for="id_correo" class="form-label">Correo</label>
+                    {{ form.correo }}
+                    <div id="errorCorreo" class="text-danger"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid mb-3">
+            <div class="row justify-content-center">
+                <div class="form col-12 col-lg-8">
+                    <label for="id_mensaje" class="form-label">Mensaje</label>
+                    {{ form.mensaje }}
+                    <div id="errorMensaje" class="text-danger"></div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-lg btn-success mt-5">Enviar</button>
+    </form>
+</div>
+{% endblock %}
+
+
+
+

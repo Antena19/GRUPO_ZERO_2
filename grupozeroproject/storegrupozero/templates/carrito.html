@@ -1,13 +1,13 @@
-<!-- templates/carrito.html -->
 {% extends 'base.html' %}
 {% load cart_extras %}
 
 {% block title %}Carrito{% endblock %}
 
 {% block content %}
-<h1>Carrito de Compras</h1>
-{% if cart.items.count > 0 %}
-    <table class="table">
+<div class="container mt-5">
+    <h1 class="titulo-seccion text-center mb-4">Carrito de Compras</h1>
+    {% if cart.items.count > 0 %}
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Producto</th>
@@ -22,8 +22,10 @@
             <tr>
                 <td>{{ item.product.name }}</td>
                 <td>${{ item.product.price }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>${{ item.product.price|multiply:item.quantity }}</td>
+                <td>
+                    <input type="number" class="form-control quantity-input" value="{{ item.quantity }}" min="1" data-item-id="{{ item.id }}">
+                </td>
+                <td class="subtotal">${{ item.product.price|multiply:item.quantity }}</td>
                 <td>
                     <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Eliminar</a>
                 </td>
@@ -31,13 +33,14 @@
             {% endfor %}
         </tbody>
     </table>
-    <h3>Total: ${{ cart.items.all|sum_total }}</h3>
-    <a href="#" class="btn btn-primary">Proceder al Pago</a>
-    <a href="{% url 'productos' %}" class="btn btn-secondary">Seguir Comprando</a>
-{% else %}
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="{% url 'productos' %}" class="btn btn-warning">Continuar Comprando</a>
+        <h3>Total: $<span id="total">{{ cart.items.all|sum_total }}</span></h3>
+        <a href="#" class="btn btn-success">Proceder al Pago</a>
+    </div>
+    {% else %}
     <p>Tu carrito está vacío</p>
     <a href="{% url 'productos' %}" class="btn btn-secondary">Ver Productos</a>
-{% endif %}
+    {% endif %}
+</div>
 {% endblock %}
-
-

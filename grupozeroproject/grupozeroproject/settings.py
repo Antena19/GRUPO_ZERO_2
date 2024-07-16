@@ -71,7 +71,6 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'grupozeroproject.urls'
 
 # Template files
-# grupozeroproject/settings.py
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

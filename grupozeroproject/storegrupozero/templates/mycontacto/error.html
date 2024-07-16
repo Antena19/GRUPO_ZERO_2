@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+Error - Grupo Cero
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="titulo-seccion text-center mb-4">¡Hubo un Error al Enviar el Mensaje!</h2>
+    <p class="text-center">Por favor, intenta nuevamente.</p>
+    <div class="text-center">
+        <a href="{% url 'contacto' %}" class="btn btn-danger">Volver al Formulario</a>
+    </div>
+</div>
+{% endblock %}

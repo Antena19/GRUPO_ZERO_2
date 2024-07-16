@@ -1,0 +1,34 @@
+<!-- templates/mycontacto/lista_mensajes.html -->
+{% extends "base.html" %}
+
+{% block title %}
+Lista de Mensajes - Grupo Cero
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="titulo-seccion text-center mb-4">Lista de Mensajes</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Mensaje</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mensaje in mensajes %}
+                <tr>
+                    <td>{{ mensaje.nombre }}</td>
+                    <td>{{ mensaje.correo }}</td>
+                    <td>{{ mensaje.mensaje }}</td>
+                    <td>{{ mensaje.fecha }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

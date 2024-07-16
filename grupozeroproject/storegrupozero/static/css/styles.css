@@ -7,44 +7,82 @@
     --color3: #19302b;
     --color4: #0b1416;
     --color5: #fefefe;
+    --bg-light: #ffffff;
+    --text-light: #000000;
+    --bg-dark: #333333;
+    --text-dark: #ffffff;
+    --nav-bg-dark: #222222;
+    --input-bg-dark: #555555;
+    --input-border-dark: #666666;
+    --btn-green: seagreen;
+    --btn-green-dark: #2d7042; /* Color más oscuro para hover */
+    --semi-transparent-black: rgba(0, 0, 0, 0.6);
+    --carousel-arrow-color: #cccccc; /* Color gris claro para las flechas del carrusel */
 }
 
-/* PAG INICIO (INDEX) */
-/* COLOR FONDO NARVAR */
+/* General */
+body {
+    background-image: url('../img/fondo-negro-2.jpg');
+    background-color: var(--bg-dark);
+    color: var(--text-dark);
+    font-family: "Playfair Display", serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.titulo-seccion {
+    font-size: 3rem;
+    font-family: "Playfair Display", serif;
+    margin: 3rem 0; /* Espacio uniforme arriba y abajo */
+    color: var(--color5); /* Color blanco */
+    text-align: center;
+}
+
+.link-volver {
+    color: whitesmoke; /* Color claro */
+    text-decoration: none; /* Sin subrayado */
+    font-size: 1.2rem; /* Tamaño de fuente */
+    font-family: "Playfair Display", serif; /* Fuente consistente */
+    transition: color 0.3s;
+}
+
+.link-volver:hover {
+    color: var(--color2); /* Color más oscuro al pasar el ratón */
+    text-decoration: underline; /* Subrayado al pasar el ratón */
+}
+
+/* Navbar */
 .navbar {
-    background-color: #19302b;
+    background-color: var(--color3);
 }
 
-/* TAMAÑO LOGO EN NARVAR */
 .logo {
     height: 70px;
 }
 
 .navbar-nav .nav-link {
-    font-size: 20px; /* Tamaño de la letra */
-    font-family: "Playfair Display", serif; /* Cambiar la fuente */
+    font-size: 20px;
+    font-family: "Playfair Display", serif;
+    transition: color 0.3s; /* Añadir transición para el color */
 }
 
 .navbar-nav .nav-link:hover {
-    color: gray !important; /* Cambia el color del texto al pasar el ratón sobre el enlace */
-    /*  important css tiene prioridad */
+    color: #808080; /* Cambiar a un color más oscuro al pasar el ratón */
 }
 
 .navbar-nav .nav-link i {
-    font-size: 24px; /* Tamaño del icono */
+    font-size: 24px;
 }
 
-/* tamaño y estilo titulo */
+/* Subtitulos */
 .subtitulos {
     color: var(--color3);
-    font-size: 50px;
     font-family: "Playfair Display", serif;
-    text-decoration: none; /* Quita el subrayado */
+    text-decoration: none;
     font-size: 40px;
 }
 
 .subtitulos:hover {
-    color: gray;
+    color: #808080;
     margin-top: 30%;
 }
 
@@ -53,108 +91,497 @@
     border-radius: 10%;
 }
 
-/* BOTON BUSCAR */
-/* Cambiar color del botón al pasar el ratón por encima */
+/* Boton Buscar */
 .btn-buscar {
-    background-color: seagreen; /* verde */
-    border-color: var(--color5); /* también cambiamos el color del borde */
+    background-color: var(--btn-green);
+    border: none;
+    transition: background-color 0.3s;
 }
 
 .btn-buscar:hover {
-    background-color: var(--color2);
-    border-color: var(--color4); /* también cambiamos el color del borde */
+    background-color: var(--btn-green-dark);
 }
 
-/* slide */
-
+/* Carrusel */
 .carousel-item img {
-    max-width: 100%; /* Establecer el ancho máximo al 100% */
-    height: auto; /* Altura automática para mantener la relación de aspecto */
-    object-fit: cover;
+    width: 100%;
+    height: auto; /* Asegura que la imagen mantenga sus proporciones */
+    object-fit: contain; /* Asegura que la imagen se ajuste al contenedor sin ser recortada */
+    max-height: 600px; /* Aumenta el tamaño máximo de la imagen en el carrusel */
 }
 
 .carousel {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    max-height: 600px; /* Ajusta la altura máxima del contenedor del carrusel */
+    padding: 20px; /* Espacio alrededor del carrusel */
+    margin-bottom: 3rem; /* Espacio adicional debajo del carrusel */
 }
 
-.detalle {
-    font-family: "Playfair Display", serif;
+.carousel-caption h3,
+.carousel-caption p {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Sombra al texto */
 }
 
-.vin-detalle {
-    text-decoration: none;
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    filter: invert(100%); /* Cambia las flechas a un color claro */
 }
 
-.h3 {
-    font-family: "Playfair Display", serif;
+/* Animación para títulos de cards */
+.card-title span {
+    display: inline-block;
+    opacity: 0;
+    animation: fadeIn 0.1s forwards;
 }
 
-.foto-producto {
-    max-width: 800px;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
-.h5 {
-    font-size: 50px;
-    font-family: "Playfair Display", serif;
-}
-
-.parrafo {
-    font-size: 20px;
-    font-family: "Playfair Display", serif;
-}
-
-/* color boton volver inicio */
-.btn {
-    background-color: lightgrey;
-}
-
-/* SECCION CONTACTANOS */
-/* Estilo CSS para el formulario */
+/* Estilos para el formulario de contacto y registro */
 .formulario {
-    background-size: cover; /* Ajusta la imagen para que cubra todo el contenedor */
-    background-position: center; /* Centra la imagen de fondo */
-    padding: 60px; /* Añade un poco de espacio alrededor del formulario */
-    font-family: "Playfair Display", serif; /* Cambiar la fuente */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo transparente */
+    padding: 60px;
+    border-radius: 10px;
 }
 
-
-
-.cont {
-    margin-left: 20%;
-    margin-right: 20%;
+.formulario .form-label {
+    color: var(--color5); /* Color blanco para las etiquetas */
 }
 
-/* COLOR A BOTON FORMULARIO */
-.btn {
-    background-color: seagreen;
+.formulario .form-control {
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo claro para los campos */
+    color: var(--color5); /* Texto claro */
+    border: 1px solid var(--input-border-dark);
 }
 
-/* PIE DE PAGINA */
+.input-semi-transparente {
+    background-color: rgba(255, 255, 255, 0.1); /* Fondo claro para los campos */
+    color: var(--color5); /* Texto claro */
+    border: 1px solid var(--input-border-dark);
+}
+
+.formulario .form-control::placeholder {
+    color: var(--color5); /* Color claro para los placeholders */
+}
+
+.formulario .btn {
+    background-color: var(--btn-green);
+    color: var(--text-dark);
+    border: none;
+    transition: background-color 0.3s;
+    max-width: 150px; 
+}
+
+.formulario .btn:hover {
+    background-color: var(--btn-green-dark);
+}
+
+.formulario .text-danger {
+    color: red;
+}
+
+/* Clase para hacer los campos más estrechos */
+.campo-estrecho {
+    max-width: 300px; /* Ajusta el valor según sea necesario */
+    width: 100%; /* Asegura que el campo ocupe el 100% de su contenedor */
+}
+
+/* Estilos adicionales para centrar el formulario y agregar espacio entre elementos */
+.formulario .container-fluid {
+    padding: 0;
+}
+
+.formulario .row {
+    margin-bottom: 20px; /* Espacio entre filas */
+}
+
+.formulario h2.titulo-seccion {
+    font-size: 2rem; /* Ajusta el tamaño del título según sea necesario */
+    margin-bottom: 40px; /* Espacio debajo del título */
+}
+
+.formulario .btn {
+    width: 100%; /* Asegura que el botón ocupe todo el ancho del formulario */
+}
+
+/* Título de Sección */
+.titulo-seccion {
+    font-size: 3rem;
+    font-family: "Playfair Display", serif;
+    margin: 3rem 0; /* Espacio uniforme arriba y abajo */
+    color: var(--color5); /* Color blanco */
+    text-align: center;
+}
+/* Espacio entre el formulario y el pie de página */
+.container.mt-5 {
+    margin-bottom: 100px; /* Ajusta según sea necesario */
+}
+
+/* Separación entre el formulario y el pie de página */
+.container.mt-5.mb-5 {
+    margin-top: 5rem !important;
+    margin-bottom: 5rem !important;
+}
+
+/* Tarjetas */
+.card {
+    margin-bottom: 2rem; /* Más espacio entre cards */
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo transparente */
+    color: var(--text-dark); /* Texto en blanco */
+    box-shadow: 0 8px 16px 0 rgba(118, 117, 117, 0.4); /* Sombra gris más grande */
+    border: none; /* Quitar borde */
+}
+
+.card img {
+    width: 100%; /* Asegura que la imagen mantenga todo el ancho de la card */
+    height: auto; /* Mantiene las proporciones de la imagen */
+    object-fit: cover; /* Asegura que la imagen se ajuste al contenedor */
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.card .btn {
+    background-color: var(--btn-green);
+    color: var(--text-dark);
+    margin-top: 1rem; /* Separar el botón del texto */
+    align-self: center; /* Centrar el botón */
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.card .btn:hover {
+    background-color: var(--btn-green-dark);
+}
+
+/* Tabla */
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Pie de pagina */
 .fin {
-    /* COLOR FONDO */
     background-color: var(--color4);
-    /* TAMAÑO ALTURA */
     max-height: 300px;
 }
 
-/* TAMAÑO LOGO PIE DE PAGINA */
 .logo2 {
     height: 150px;
 }
 
-/* ESTILOS PAGINA ARTISTAS */
-.carousel-artistas {
-    width: 530px;
-    margin-top: 10%;
+/* Tema claro */
+body.tema-claro {
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    background-image: none; /* Quitar la imagen de fondo */
 }
 
-.card {
-    margin-top: auto;
+/* Asegurar que todos los títulos y textos cambien de color */
+body.tema-claro h1, 
+body.tema-claro h2, 
+body.tema-claro h3, 
+body.tema-claro h4, 
+body.tema-claro h5, 
+body.tema-claro h6,
+body.tema-claro p,
+body.tema-claro .titulo-seccion,
+body.tema-claro .link-volver,
+body.tema-claro .form-label,
+body.tema-claro .parrafo,
+body.tema-claro .subtitulos,
+body.tema-claro .detalle,
+body.tema-claro .btn-light,
+body.tema-claro .carousel-caption {
+    color: var(--text-dark) !important; /* Color oscuro para los textos */
 }
 
-.h6 {
-    font-size: 50px;
+/* Asegurar que los campos de formulario cambien de color */
+body.tema-claro .form-control {
+    background-color: var(--bg-light);
+    color: var(--text-dark) !important; /* Texto oscuro */
+    border-color: var(--input-border-dark) !important;
+}
+
+/* Asegurar que los botones cambien de color */
+body.tema-claro .btn {
+    background-color: var(--color3) !important; /* Fondo oscuro para los botones */
+    color: var(--text-light) !important; /* Texto claro */
+    border-color: var(--color3) !important;
+}
+
+body.tema-claro .btn:hover {
+    background-color: var(--color2) !important; /* Cambiar a un color más oscuro al pasar el ratón */
+}
+
+body.tema-claro .btn-success {
+    background-color: var(--btn-green-dark) !important; /* Fondo oscuro para el botón de éxito */
+    color: var(--text-light) !important; /* Texto claro */
+    border-color: var(--btn-green-dark) !important;
+}
+
+body.tema-claro .btn-success:hover {
+    background-color: var(--btn-green) !important; /* Cambiar a verde al pasar el ratón */
+}
+
+/* Mantener el color original de la barra de navegación y el pie de página */
+body.tema-claro .navbar,
+body.tema-claro .fin {
+    background-color: var(--color3) !important; /* Mantener el color de fondo original */
+}
+
+/* Botón Agregar al Carrito */
+.btn-agregar-carrito {
+    background-color: var(--btn-green);
+    color: var(--text-dark);
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.btn-agregar-carrito:hover {
+    background-color: var(--btn-green-dark);
+}
+
+/* Título del Producto en Detalle */
+.titulo-seccion {
+    font-size: 3.5rem; /* Ajusta el tamaño del título según sea necesario */
     font-family: "Playfair Display", serif;
+    margin: 3rem 0; /* Espacio uniforme arriba y abajo */
+    color: var(--color5); /* Color blanco */
+    text-align: center;
+}
+
+/* Descripción del Producto */
+.product-description {
+    max-width: 500px; /* Ajusta el ancho máximo según sea necesario */
+    margin: 0 auto; /* Centra la descripción */
+}
+
+/* Enlaces para Volver e Inicio */
+.link-volver {
+    color: var(--btn-green);
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+.link-volver:hover {
+    color: var(--btn-green-dark);
+    text-decoration: underline;
+}
+
+.btn-outline-secondary {
+    border: none;
+    color: var(--btn-green);
+    background-color: transparent;
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.btn-outline-secondary:hover {
+    color: var(--btn-green-dark);
+    background-color: var(--semi-transparent-black);
+}
+
+/* Otros */
+#resultados-busqueda {
+    margin-top: 20px;
+}
+
+#resultados-busqueda div {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+#resultados-busqueda h3 {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+#resultados-busqueda p {
+    margin: 5px 0;
+    font-size: 1em;
+}
+
+#resultados-busqueda a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+#resultados-busqueda a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+#tema-toggle {
+    background-color: transparent !important;
+    border: 1px solid white;
+    color: white;
+    z-index: 1000;
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    padding: 2px 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 10px;
+}
+
+#tema-toggle::after {
+    content: 'Cambiar\nTema';
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+    padding: 2px 5px;
+    border-radius: 5px;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: pre-wrap;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    font-size: 8px;
+}
+
+#tema-toggle:hover::after {
+    opacity: 1;
+}
+
+#tema-toggle:hover {
+    color: white;
+    border-color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card .img-fluid {
+        max-height: 200px;
+    }
+
+    .h5 {
+        font-size: 24px;
+    }
+
+    .h3 {
+        font-size: 32px;
+    }
+
+    .parrafo {
+        font-size: 16px;
+    }
+
+    .card-body {
+        padding: 10px;
+    }
+}
+
+/* Estilos específicos para los modales */
+.modal-content {
+    background-color: #000000 !important; /* Fondo negro para el contenido del modal */
+    color: #ffffff !important; /* Texto claro para el contenido del modal */
+}
+
+.modal-header,
+.modal-footer {
+    border: none; /* Quitar bordes de la cabecera y pie del modal */
+    background-color: #000000 !important; /* Fondo negro para la cabecera y el pie del modal */
+}
+
+.modal-header .btn-close {
+    filter: invert(100%) !important; /* Cambiar el color del botón de cierre a blanco */
+}
+
+.modal-body {
+    background-color: #000000 !important; /* Fondo negro para el cuerpo del modal */
+    color: #ffffff !important; /* Texto claro para el cuerpo del modal */
+}
+
+.modal-title,
+.modal-body p,
+.modal-body h1, 
+.modal-body h2, 
+.modal-body h3, 
+.modal-body h4, 
+.modal-body h5, 
+.modal-body h6,
+.modal-body a,
+.modal-body span,
+.modal-body label {
+    color: #ffffff !important; /* Color claro para los textos del modal */
+}
+
+.modal-footer .btn {
+    background-color: #28a745 !important; /* Fondo verde para los botones */
+    color: #ffffff !important; /* Texto claro */
+    border: none !important;
+}
+
+.modal-footer .btn:hover {
+    background-color: #218838 !important; /* Fondo verde oscuro al pasar el ratón */
+}
+
+/* Asegurar que los botones dentro del modal también sean de color claro */
+.modal-body .btn {
+    background-color: #28a745 !important; /* Fondo verde para los botones */
+    color: #ffffff !important; /* Texto claro */
+    border: none !important;
+    transition: background-color 0.3s !important;
+}
+
+.modal-body .btn:hover {
+    background-color: #218838 !important; /* Fondo verde oscuro al pasar el ratón */
+}
+
+/* Asegurar que los campos de formulario dentro del modal también sean claros */
+.modal-body .form-control {
+    background-color: #333333 !important; /* Fondo oscuro para los campos de formulario */
+    color: #ffffff !important; /* Texto claro */
+    border-color: #666666 !important;
+}
+
+/* Asegurar que los enlaces dentro del modal sean de color claro */
+.modal-body a {
+    color: #ffffff !important; /* Texto claro para los enlaces */
+}
+
+.modal-body a:hover {
+    color: #cccccc !important; /* Texto más claro al pasar el ratón */
 }

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}
+Éxito - Grupo Cero
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <h2 class="titulo-seccion text-center mb-4">¡Mensaje Enviado con Éxito!</h2>
+    <p class="text-center">Gracias por contactarnos. Nos pondremos en contacto contigo a la brevedad.</p>
+    <div class="text-center">
+        <a href="{% url 'index' %}" class="btn btn-primary">Volver al Inicio</a>
+    </div>
+</div>
+{% endblock %}

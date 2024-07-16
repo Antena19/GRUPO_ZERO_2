@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login - Grupo Cero
+{% endblock %}
+
+{% block body_class %}
+fondo-contacto
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5 d-flex justify-content-center">
+    <div class="formulario p-5 rounded">
+        <h2 class="titulo-seccion text-center mb-4 text-white">INICIAR SESIÓN</h2>
+        <form class="d-flex flex-column align-items-center text-white" method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="container-fluid mb-4 mt-5">
+                <div class="row justify-content-center">
+                    <div class="form col-12">
+                        <label for="username" class="form-label">Nombre de usuario</label>
+                        <input type="text" class="form-control campo-estrecho" id="username" name="username" aria-describedby="emailHelp">
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-4">
+                    <div class="form col-12">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control campo-estrecho" id="password" name="password" aria-describedby="emailHelp">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-lg btn-success mt-5">Iniciar Sesión</button>
+            <div class="container text-center my-4">
+                <p>¿No tienes una cuenta? <a href="{% url 'registro' %}">Regístrate aquí</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

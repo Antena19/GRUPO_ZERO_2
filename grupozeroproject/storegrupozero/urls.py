@@ -1,6 +1,6 @@
-# storegrupozero/urls.py
 from django.urls import path, include
 from storegrupozero import views
+from storegrupozero.views import login_view, registro
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -12,8 +12,11 @@ urlpatterns = [
     path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     path('carrito/', views.view_cart, name='view_cart'),
     path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('registro/', views.registro, name='registro'),
-    path('contacto/', views.contact, name='contacto'),  # URL para el formulario de contacto
-    path('ver_contactos/', views.ver_contactos, name='ver_contactos'),  # URL para ver los registros de contactos
+    path('update_cart_item_quantity/<int:item_id>/', views.update_cart_item_quantity, name='update_cart_item_quantity'),
+    path('login/', login_view, name='login'),
+    path('registro/', registro, name='registro'),
+    path('contacto/', views.formulario_contacto, name='contacto'),
+    path('contacto/exito/', views.exito, name='exito'),
+    path('contacto/error/', views.error, name='error'),
+    path('contacto/mensajes/', views.lista_mensajes, name='lista_mensajes'),
 ]
