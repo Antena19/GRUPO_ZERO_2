@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
-import random
-from .forms import ContactForm, RegistroForm
-from .models import Artist, Technique, Product, Cart, CartItem, MensajeContacto
+from django.views.decorators.http import require_POST
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
+from .forms import ContactForm, RegistroForm
+from .models import Artist, Technique, Product, Cart, CartItem, MensajeContacto
+import random
 
 # VISTA INICIO
 def index(request):
@@ -80,9 +81,9 @@ def login_view(request):
 # CRUD CARRITO
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    cart, created = Cart.objects.get_or_create(user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
     if not request.session.session_key:
         request.session.create()
+    cart, created = Cart.objects.get_or_create(user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
     cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
     if not created:
         cart_item.quantity += 1
@@ -135,3 +136,25 @@ def exito(request):
 
 def error(request):
     return render(request, 'mycontacto/error.html')
+
+@require_POST
+def update_cart(request):
+    item_id = request.POST.get('item_id')
+    quantity = int(request.POST.get('quantity'))
+    
+    try:
+        cart_item = CartItem.objects.get(id=item_id, user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
+        cart_item.quantity = quantity
+        cart_item.save()
+        
+        subtotal = cart_item.product.price * quantity
+        cart = Cart.objects.get(items=cart_item)
+        total = sum(item.product.price * item.quantity for item in cart.items.all())
+        
+        return JsonResponse({
+            'status': 'success',
+            'subtotal': subtotal,
+            'total': total
+        })
+    except CartItem.DoesNotExist:
+        return JsonResponse({'status': 'error', 'message': 'Item not found'}, status=400)

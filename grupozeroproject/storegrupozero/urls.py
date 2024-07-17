@@ -1,7 +1,6 @@
-from django.urls import path, include
+from django.urls import path
 from storegrupozero import views
 from storegrupozero.views import login_view, registro
-from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -13,6 +12,7 @@ urlpatterns = [
     path('carrito/', views.view_cart, name='view_cart'),
     path('remove_from_cart/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
     path('update_cart_item_quantity/<int:item_id>/', views.update_cart_item_quantity, name='update_cart_item_quantity'),
+    path('update_cart/', views.update_cart, name='update_cart'),
     path('login/', login_view, name='login'),
     path('registro/', registro, name='registro'),
     path('contacto/', views.formulario_contacto, name='contacto'),
