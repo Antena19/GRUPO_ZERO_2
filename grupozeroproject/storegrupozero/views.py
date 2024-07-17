@@ -142,6 +142,8 @@ def update_cart(request):
     item_id = request.POST.get('item_id')
     quantity = int(request.POST.get('quantity'))
     
+    print(f"Updating cart item: {item_id} with quantity: {quantity}")
+
     try:
         cart_item = CartItem.objects.get(id=item_id, user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
         cart_item.quantity = quantity
@@ -151,10 +153,13 @@ def update_cart(request):
         cart = Cart.objects.get(items=cart_item)
         total = sum(item.product.price * item.quantity for item in cart.items.all())
         
+        print(f"New subtotal: {subtotal}, New total: {total}")
+
         return JsonResponse({
             'status': 'success',
             'subtotal': subtotal,
             'total': total
         })
     except CartItem.DoesNotExist:
+        print("CartItem does not exist")
         return JsonResponse({'status': 'error', 'message': 'Item not found'}, status=400)
