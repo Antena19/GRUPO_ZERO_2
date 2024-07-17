@@ -20,14 +20,163 @@
     --carousel-arrow-color: #cccccc; /* Color gris claro para las flechas del carrusel */
 }
 
-/* General */
+/* HOJA DE ESTILO */
+
+/* PALETA DE COLORES */
+:root {
+    --color1: #ff6f8d;
+    --color2: #554f1f;
+    --color3: #19302b;
+    --color4: #0b1416;
+    --color5: #fefefe;
+    --btn-green: seagreen;
+    --btn-green-dark: #2d7042;
+    --semi-transparent-black: rgba(0, 0, 0, 0.6);
+    --carousel-arrow-color: #cccccc;
+}
+
+/* Estilos generales */
 body {
-    background-image: url('../img/fondo-negro-2.jpg');
-    background-color: var(--bg-dark);
-    color: var(--text-dark);
     font-family: "Playfair Display", serif;
     transition: background-color 0.3s, color 0.3s;
 }
+
+/* Estilos para el tema oscuro (por defecto) */
+body {
+    background-image: url('../img/fondo-negro-2.jpg');
+    background-color: #333333;
+    color: #ffffff;
+}
+
+.navbar, .fin {
+    background-color: var(--color3);
+}
+
+.form-control, .input-semi-transparente {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color5);
+    border: 1px solid #666666;
+}
+
+.btn-buscar, .btn-agregar-carrito, .formulario .btn {
+    background-color: var(--btn-green);
+    color: #ffffff;
+}
+
+.btn-buscar:hover, .btn-agregar-carrito:hover, .formulario .btn:hover {
+    background-color: var(--btn-green-dark);
+}
+
+.card {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+}
+
+/* Estilos para el tema claro */
+body.tema-claro {
+    background-image: none;
+    background-color: #003d7a !important; /* Nuevo color de fondo */
+    color: #ffffff !important; /* Cambiado a texto blanco para mejor contraste */
+}
+
+body.tema-claro .navbar,
+body.tema-claro .fin {
+    background-color: #002d5a !important; /* Un tono más oscuro para la barra de navegación y el pie de página */
+}
+
+body.tema-claro .form-control,
+body.tema-claro .input-semi-transparente {
+    background-color: #004c94; /* Un tono más claro para los campos de entrada */
+    color: #ffffff !important;
+    border: 1px solid #0056b3;
+}
+
+body.tema-claro h1, 
+body.tema-claro h2, 
+body.tema-claro h3, 
+body.tema-claro h4, 
+body.tema-claro h5, 
+body.tema-claro h6,
+body.tema-claro p,
+body.tema-claro .titulo-seccion,
+body.tema-claro .link-volver,
+body.tema-claro .form-label,
+body.tema-claro .parrafo,
+body.tema-claro .subtitulos,
+body.tema-claro .detalle,
+body.tema-claro .card-title,
+body.tema-claro .card-text {
+    color: #ffffff !important; /* Texto blanco para mejor contraste */
+}
+
+body.tema-claro .card {
+    background-color: #004c94; /* Un tono más claro para las tarjetas */
+    color: #ffffff !important;
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Ajustar el color de los enlaces para mejor visibilidad */
+body.tema-claro a {
+    color: #7cb9ff !important; /* Un azul claro para los enlaces */
+}
+
+body.tema-claro a:hover {
+    color: #aed6ff !important; /* Un azul más claro al pasar el ratón */
+}
+
+/* Ajustar el color de los botones si es necesario */
+body.tema-claro .btn-buscar,
+body.tema-claro .btn-agregar-carrito,
+body.tema-claro .formulario .btn {
+    background-color: #00a86b; /* Un verde más brillante para los botones */
+    color: #ffffff !important;
+}
+
+body.tema-claro .btn-buscar:hover,
+body.tema-claro .btn-agregar-carrito:hover,
+body.tema-claro .formulario .btn:hover {
+    background-color: #008c59; /* Un verde más oscuro al pasar el ratón */
+}
+
+/* Estilos para el modal o tarjeta emergente en el tema claro */
+body.tema-claro .modal-content,
+body.tema-claro .card {
+    background-color: #003d7a !important;
+    color: #ffffff !important;
+}
+
+body.tema-claro .modal-header,
+body.tema-claro .modal-footer,
+body.tema-claro .card-header,
+body.tema-claro .card-footer {
+    background-color: #002d5a !important; /* Un tono más oscuro para el encabezado y pie */
+    border-color: #004c94 !important;
+}
+
+body.tema-claro .modal-body,
+body.tema-claro .card-body {
+    background-color: #003d7a !important;
+}
+
+body.tema-claro .modal-title,
+body.tema-claro .card-title,
+body.tema-claro .modal-body p,
+body.tema-claro .card-text {
+    color: #ffffff !important;
+}
+
+/* Si tienes botones dentro del modal o tarjeta */
+body.tema-claro .modal .btn,
+body.tema-claro .card .btn {
+    background-color: #00a86b !important;
+    color: #ffffff !important;
+}
+
+body.tema-claro .modal .btn:hover,
+body.tema-claro .card .btn:hover {
+    background-color: #008c59 !important;
+}
+
 
 .titulo-seccion {
     font-size: 3rem;
