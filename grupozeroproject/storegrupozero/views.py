@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
-import random
-from .forms import ContactForm, RegistroForm
-from .models import Artist, Technique, Product, Cart, CartItem, MensajeContacto
-from django.contrib.auth import authenticate, login
+from django.views.decorators.http import require_POST
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
+from .forms import ContactForm, RegistroForm
+from .models import Artist, Technique, Product, Cart, CartItem, MensajeContacto
+import random
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 # VISTA INICIO
 def index(request):
@@ -80,9 +82,9 @@ def login_view(request):
 # CRUD CARRITO
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    cart, created = Cart.objects.get_or_create(user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
     if not request.session.session_key:
         request.session.create()
+    cart, created = Cart.objects.get_or_create(user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
     cart_item, created = CartItem.objects.get_or_create(product=product, user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
     if not created:
         cart_item.quantity += 1
@@ -116,7 +118,12 @@ def formulario_contacto(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            form.save()
+            mensaje_contacto = MensajeContacto(
+                nombre=form.cleaned_data['nombre'],
+                correo=form.cleaned_data['correo'],
+                mensaje=form.cleaned_data['mensaje']
+            )
+            mensaje_contacto.save()
             messages.success(request, 'Mensaje enviado con éxito.')
             return redirect('exito')
         else:
@@ -126,12 +133,51 @@ def formulario_contacto(request):
         form = ContactForm()
     return render(request, 'mycontacto/formulario_contacto.html', {'form': form})
 
+# Verificar si el usuario es superusuario
+def is_superuser(user):
+    return user.is_superuser
+
+# Vista para listar los mensajes
+@login_required
+@user_passes_test(is_superuser)
 def lista_mensajes(request):
     mensajes = MensajeContacto.objects.all()
-    return render(request, 'mycontacto/lista_mensajes.html', {'mensajes': mensajes})
+    mensajes_descifrados = [{'nombre': mensaje.nombre, 'correo': mensaje.correo, 'mensaje': mensaje.get_mensaje(), 'fecha': mensaje.fecha} for mensaje in mensajes]
+    return render(request, 'mycontacto/lista_mensajes.html', {'mensajes': mensajes_descifrados})
 
 def exito(request):
     return render(request, 'mycontacto/exito.html')
 
 def error(request):
     return render(request, 'mycontacto/error.html')
+
+@require_POST
+def update_cart(request):
+    item_id = request.POST.get('item_id')
+    quantity = int(request.POST.get('quantity'))
+    
+    print(f"Updating cart item: {item_id} with quantity: {quantity}")
+
+    try:
+        cart_item = CartItem.objects.get(id=item_id, user=request.user if request.user.is_authenticated else None, session_key=request.session.session_key)
+        cart_item.quantity = quantity
+        cart_item.save()
+        
+        subtotal = cart_item.product.price * quantity
+        cart = Cart.objects.get(items=cart_item)
+        total = sum(item.product.price * item.quantity for item in cart.items.all())
+        
+        print(f"New subtotal: {subtotal}, New total: {total}")
+
+        return JsonResponse({
+            'status': 'success',
+            'subtotal': subtotal,
+            'total': total
+        })
+    except CartItem.DoesNotExist:
+        print("CartItem does not exist")
+        return JsonResponse({'status': 'error', 'message': 'Item not found'}, status=400)
+    
+def custom_logout_view(request):
+    logout(request)
+    return render(request, 'registration/logged_out.html')

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django import forms
+from .utils import encrypt_message, decrypt_message
 
 # MODELO ARTISTAS
 class Artist(models.Model):
@@ -20,6 +21,7 @@ class Technique(models.Model):
     image = models.ImageField(upload_to='techniques/', null=True, blank=True)  # Agregar campo de imagen
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.name
@@ -60,7 +62,20 @@ class MensajeContacto(models.Model):
     nombre = models.CharField(max_length=100)
     correo = models.EmailField()
     mensaje = models.TextField()
+    mensaje_cifrado = models.TextField(blank=True, null=True)
     fecha = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        # Cifra el mensaje antes de guardarlo
+        self.mensaje_cifrado = encrypt_message(self.mensaje)
+        super().save(*args, **kwargs)
+
+    def get_mensaje(self):
+        # Si no hay mensaje cifrado, devolver el mensaje sin cifrar
+        if not self.mensaje_cifrado:
+            return self.mensaje
+        # Descifra el mensaje al recuperarlo
+        return decrypt_message(self.mensaje_cifrado)
 
     def __str__(self):
         return self.nombre

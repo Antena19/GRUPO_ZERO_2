@@ -1,46 +1,107 @@
 {% extends 'base.html' %}
 {% load cart_extras %}
+{% load humanize %}
 
 {% block title %}Carrito{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="titulo-seccion text-center mb-4">Carrito de Compras</h1>
-    {% if cart.items.count > 0 %}
+  <h1 class="titulo-seccion text-center mb-4">Carrito de Compras</h1>
+  {% if cart.items.count > 0 %}
     <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Subtotal</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in cart.items.all %}
-            <tr>
-                <td>{{ item.product.name }}</td>
-                <td>${{ item.product.price }}</td>
-                <td>
-                    <input type="number" class="form-control quantity-input" value="{{ item.quantity }}" min="1" data-item-id="{{ item.id }}">
-                </td>
-                <td class="subtotal">${{ item.product.price|multiply:item.quantity }}</td>
-                <td>
-                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Eliminar</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Precio</th>
+          <th>Cantidad</th>
+          <th>Subtotal</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart.items.all %}
+          <tr>
+            <td>{{ item.product.name }}</td>
+            <td class="price" data-price="{{ item.product.price }}">${{ item.product.price|floatformat:0|intcomma }}</td>
+            <td>
+              <label for="quantity-input-{{ item.id }}" class="sr-only">Cantidad</label>
+              <input type="number" id="quantity-input-{{ item.id }}" name="quantity-{{ item.id }}" class="form-control quantity-input" value="{{ item.quantity }}" min="1" data-item-id="{{ item.id }}" title="Ingrese la cantidad" placeholder="Cantidad">
+            </td>
+            <td class="subtotal">${{ item.product.price|multiply:item.quantity|floatformat:0|intcomma }}</td>
+            <td>
+              <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Eliminar</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
     </table>
     <div class="d-flex justify-content-between align-items-center">
-        <a href="{% url 'productos' %}" class="btn btn-warning">Continuar Comprando</a>
-        <h3>Total: $<span id="total">{{ cart.items.all|sum_total }}</span></h3>
-        <a href="#" class="btn btn-success">Proceder al Pago</a>
+      <a href="{% url 'productos' %}" class="btn btn-warning">Continuar Comprando</a>
+      <h3>Total: $<span id="total">{{ cart.items.all|sum_total|floatformat:0|intcomma }}</span></h3>
+      <a href="#" class="btn btn-success">Proceder al Pago</a>
     </div>
-    {% else %}
+  {% else %}
     <p>Tu carrito está vacío</p>
     <a href="{% url 'productos' %}" class="btn btn-secondary">Ver Productos</a>
-    {% endif %}
+  {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    function updateCartItem(input) {
+        var row = input.closest('tr');
+        var itemId = input.data('item-id');
+        var newQuantity = parseInt(input.val());
+        var price = parseFloat(row.find('.price').data('price'));
+
+        var newSubtotal = price * newQuantity;
+        row.find('.subtotal').text('$' + newSubtotal.toLocaleString('es-CL', {minimumFractionDigits: 0, maximumFractionDigits: 0}));
+
+        updateTotal();
+
+        $.ajax({
+            url: '{% url "update_cart" %}',
+            method: 'POST',
+            data: {
+                'item_id': itemId,
+                'quantity': newQuantity,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                console.log('Server response:', response); // Verifica la respuesta del servidor
+                if (response.status !== 'success') {
+                    alert('Error al actualizar carrito en el servidor');
+                }
+            },
+            error: function(error) {
+                console.log('Error al actualizar carrito:', error); // Verifica los errores
+                alert('Error al actualizar carrito');
+            }
+        });
+    }
+
+    function updateTotal() {
+        var total = 0;
+        $('.subtotal').each(function() {
+            var subtotal = parseFloat($(this).text().replace('$', '').replace(/\./g, '').replace(',', '.'));
+            total += subtotal;
+        });
+        $('#total').text(total.toLocaleString('es-CL', {minimumFractionDigits: 0, maximumFractionDigits: 0}));
+    }
+
+    $('.quantity-input').on('input', function() {
+        updateCartItem($(this));
+    });
+
+    $('.quantity-input').on('keypress', function(e) {
+        if (e.which == 13) {
+            e.preventDefault();
+            updateCartItem($(this));
+        }
+    });
+});
+</script>
 {% endblock %}
